@@ -193,7 +193,7 @@ function resolveDeps(
       .forEach(resolveDepsInternal);
     result[key] = value[key][0].replace(
       variable,
-      (match, name) => variables[name] ?? result[name] ?? match,
+      (match, name) => result[name] ?? variables[name] ?? match,
     );
   }
   for (const key in value) {
