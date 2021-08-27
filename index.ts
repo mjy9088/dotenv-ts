@@ -151,16 +151,13 @@ function readEnvFile(...path: string[]): Record<string, Value> {
 type MODE = 'prod' | 'dev' | 'test' | 'debug';
 
 const modeMap: Record<string, MODE> = {
+  prod: 'prod',
   production: 'prod',
-  PROD: 'prod',
-  PRODUCTION: 'prod',
+  dev: 'dev',
   development: 'dev',
   develop: 'dev',
-  DEV: 'dev',
-  DEVELOPMENT: 'dev',
-  DEVELOP: 'dev',
-  TEST: 'test',
-  DEBUG: 'debug',
+  test: 'test',
+  debug: 'debug',
 };
 
 function conflictKey(
@@ -222,7 +219,7 @@ export default function config(
   mode?: string,
   canOverwrite = false,
 ): void {
-  const modeName = mode ?? process.env.NODE_ENV ?? 'dev';
+  const modeName = (mode ?? process.env.NODE_ENV ?? 'dev').toLowerCase();
   if (!(modeName in modeMap)) {
     throw new Error(`Unrecognized mode: ${modeName}`);
   }

@@ -1,0 +1,24 @@
+{
+  "name": "dotenv-ts",
+  "private": true,
+  "description": "load environment variables from .env file, into process.env",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjy9088/dotenv-ts.git"
+  },
+  "keywords": ["dotenv"],
+  "author": "맹주영 <mjy9088@naver.com> (https://github.com/mjy9088)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjy9088/dotenv-ts/issues"
+  },
+  "homepage": "https://github.com/mjy9088/dotenv-ts#readme",
+  "devDependencies": {
+    "@types/node": "^16.7.2",
+    "typescript": "^4.4.2"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}
