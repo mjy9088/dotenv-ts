@@ -23,11 +23,16 @@
   "homepage": "https://github.com/mjy9088/dotenv-ts#readme",
   "devDependencies": {
     "@types/node": "^16.7.2",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "del-cli": "^4.0.1",
+    "eslint": "^7.32.0",
     "typescript": "^4.4.2"
   },
   "scripts": {
-    "prebuild": "del-cli \"**/*.js\" \"**/*.d.ts\" \"!node_modules/**\"",
+    "lint": "eslint . --ext .ts",
+    "clean": "del-cli \"**/*.js\" \"**/*.d.ts\" \"!node_modules/**\"",
+    "prebuild": "npm run clean & npm run lint",
     "build": "tsc"
   }
 }

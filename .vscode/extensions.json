@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "tkrkt.linenote",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "sonarsource.sonarlint-vscode",
+    "jgclark.vscode-todo-highlight",
+    "streetsidesoftware.code-spell-checker",
+  ]
+}
