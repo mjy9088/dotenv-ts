@@ -1,6 +1,17 @@
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 
+export interface EnvOption {
+  dirname?: string;
+  mode?: string;
+  canOverwrite?: boolean;
+  priority: 'local' | 'mode' | undefined;
+  variables?: Record<string, string>;
+  shareVariables: boolean;
+}
+
+export type Value = [string, Set<string>?]; // content, dependencies
+
 function unescape(unsafe: string) {
   return JSON.parse(
     `"${unsafe
@@ -10,8 +21,6 @@ function unescape(unsafe: string) {
       .replace(/\\"/g, '"')}"`,
   );
 }
-
-export type Value = [string, Set<string>?]; // content, dependencies
 
 const singleQuotedMultilineEnd = /^\s*'''\s*([#!].*)?$/;
 const doubleQuotedMultilineEnd = /^\s*"""\s*([#!].*)?$/;
@@ -65,14 +74,14 @@ const lineProcessors: [
   ],
   [
     // single quoted multiline start
-    /^\s*([a-zA-Z][\w.-]*)\s*=\s*'''\s*$/,
+    /^\s*([a-zA-Z][\w.-]*)\s*=\s*'''(.*)$/,
     (match, acc) => {
       acc.state = [match[1], undefined, false];
     },
   ],
   [
     // double quoted multiline start
-    /^\s*([a-zA-Z][\w.-]*)\s*=\s*"""\s*$/,
+    /^\s*([a-zA-Z][\w.-]*)\s*=\s*"""(.*)$/,
     (match, acc) => {
       acc.state = [match[1], undefined, true];
     },
@@ -218,9 +227,17 @@ export function apply(
 }
 
 export default function config(
-  dirname: string = process.cwd(),
-  mode?: string,
-  canOverwrite = false,
+  {
+    dirname = process.cwd(),
+    mode,
+    canOverwrite,
+    priority,
+    variables = process.env,
+    shareVariables,
+  }: EnvOption = {
+    priority: 'local',
+    shareVariables: true,
+  },
 ): void {
   const modeName = (mode ?? process.env.NODE_ENV ?? 'dev').toLowerCase();
   if (!(modeName in modeMap)) {
@@ -231,15 +248,36 @@ export default function config(
   const local = readEnvFile(dirname, '.env.local');
   const _mode = readEnvFile(dirname, `.env.${mode}`);
   const first = readEnvFile(dirname, `.env.${mode}.local`);
-  const conflict = conflictKey(_mode, local, first);
-  if (conflict) {
-    throw new Error(
-      `File with same specificity ".env.local" and ".env.${mode}" has different value with same key: "${conflict}"`,
-    );
+  if (!priority) {
+    const conflict = conflictKey(_mode, local, first);
+    if (conflict) {
+      throw new Error(
+        `File with same specificity ".env.local" and ".env.${mode}" has different value with same key: "${conflict}"`,
+      );
+    }
   }
-  const result = resolveDeps(
-    { ..._base, ...local, ..._mode, ...first },
-    process.env,
-  );
+  let result: Record<string, string>;
+  if (shareVariables) {
+    result = resolveDeps(
+      priority === 'local'
+        ? { ..._base, ...local, ..._mode, ...first }
+        : { ..._base, ..._mode, ...local, ...first },
+      variables,
+    );
+  } else if (priority === 'local') {
+    result = {
+      ...resolveDeps(_base, variables),
+      ...resolveDeps(local, variables),
+      ...resolveDeps(_mode, variables),
+      ...resolveDeps(first, variables),
+    };
+  } else {
+    result = {
+      ...resolveDeps(_base, variables),
+      ...resolveDeps(_mode, variables),
+      ...resolveDeps(local, variables),
+      ...resolveDeps(first, variables),
+    };
+  }
   apply(result, canOverwrite);
 }
