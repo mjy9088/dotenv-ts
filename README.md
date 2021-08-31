@@ -32,5 +32,5 @@ There may be any breaking changes before the first stable version.
 
 [MIT](http://vjpr.mit-license.org)
 
-[npm-image]: https://img.shields.io/npm/v/live-xxx.svg
+[npm-image]: https://img.shields.io/npm/v/dotenv-ts.svg
 [npm-url]: https://npmjs.org/package/dotenv-ts
