@@ -56,61 +56,61 @@ const lineProcessors: [
   RegExp,
   (match: RegExpMatchArray, accumulator: Reducer) => void,
 ][] = [
-  [
-    // empty line
-    /^\s*([#!].*)?$/,
-    () => {
-      /* return */
-    },
-  ],
-  [
-    // single quoted multiline start
-    /^\s*([a-zA-Z][\w.-]*)\s*=\s*'''\s*$/,
-    (match, acc) => {
-      acc.state = [match[1], undefined, false];
-    },
-  ],
-  [
-    // double quoted multiline start
-    /^\s*([a-zA-Z][\w.-]*)\s*=\s*"""\s*$/,
-    (match, acc) => {
-      acc.state = [match[1], undefined, true];
-    },
-  ],
-  [
-    // single quoted
-    /^\s*([a-zA-Z][\w.-]*)\s*=\s*'(.*?)(?<!\\)'\s*([#!].*)?$/,
-    (match, { result }) => {
-      result.push([
-        match[1],
-        [
-          match[2].match(nonEscapedSingleQuote)
-            ? `'${match[2]}'`
-            : unescape(match[2]),
-        ],
-      ]);
-    },
-  ],
-  [
-    // double quoted
-    /^\s*([a-zA-Z][\w.-]*)\s*=\s*"(.*?)(?<!\\)"\s*([#!].*)?$/,
-    (match, { result }) => {
-      result.push([
-        match[1],
-        match[2].match(nonEscapedDoubleQuote)
-          ? [`"${match[2]}"`]
-          : [unescape(match[2]), parseDeps(match[2])],
-      ]);
-    },
-  ],
-  [
-    // non quoted
-    /^\s*([a-zA-Z][\w.-]*)\s*=\s*(.*)\s*$/,
-    (match, { result }) => {
-      result.push([match[1], [match[2]]]);
-    },
-  ],
-];
+    [
+      // empty line
+      /^\s*([#!].*)?$/,
+      () => {
+        /* return */
+      },
+    ],
+    [
+      // single quoted multiline start
+      /^\s*([a-zA-Z][\w.-]*)\s*=\s*'''\s*$/,
+      (match, acc) => {
+        acc.state = [match[1], undefined, false];
+      },
+    ],
+    [
+      // double quoted multiline start
+      /^\s*([a-zA-Z][\w.-]*)\s*=\s*"""\s*$/,
+      (match, acc) => {
+        acc.state = [match[1], undefined, true];
+      },
+    ],
+    [
+      // single quoted
+      /^\s*([a-zA-Z][\w.-]*)\s*=\s*'(.*?)(?<!\\)'\s*([#!].*)?$/,
+      (match, { result }) => {
+        result.push([
+          match[1],
+          [
+            match[2].match(nonEscapedSingleQuote)
+              ? `'${match[2]}'`
+              : unescape(match[2]),
+          ],
+        ]);
+      },
+    ],
+    [
+      // double quoted
+      /^\s*([a-zA-Z][\w.-]*)\s*=\s*"(.*?)(?<!\\)"\s*([#!].*)?$/,
+      (match, { result }) => {
+        result.push([
+          match[1],
+          match[2].match(nonEscapedDoubleQuote)
+            ? [`"${match[2]}"`]
+            : [unescape(match[2]), parseDeps(match[2])],
+        ]);
+      },
+    ],
+    [
+      // non quoted
+      /^\s*([a-zA-Z][\w.-]*)\s*=\s*(.*)\s*$/,
+      (match, { result }) => {
+        result.push([match[1], [match[2]]]);
+      },
+    ],
+  ];
 
 function reducer(acc: Reducer, curr: string): Reducer {
   if (multiline(acc, curr)) return acc;

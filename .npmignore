@@ -1,0 +1,5 @@
+.editorconfig
+.prettierrc
+.vscode
+tsconfig.json
+**/*.ts

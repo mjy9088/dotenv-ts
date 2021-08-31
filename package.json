@@ -8,7 +8,13 @@
     "type": "git",
     "url": "git+https://github.com/mjy9088/dotenv-ts.git"
   },
-  "keywords": ["dotenv"],
+  "keywords": [
+    "dotenv",
+    ".env",
+    "environment",
+    "config",
+    "settings"
+  ],
   "author": "맹주영 <mjy9088@naver.com> (https://github.com/mjy9088)",
   "license": "MIT",
   "bugs": {
@@ -17,9 +23,11 @@
   "homepage": "https://github.com/mjy9088/dotenv-ts#readme",
   "devDependencies": {
     "@types/node": "^16.7.2",
+    "del-cli": "^4.0.1",
     "typescript": "^4.4.2"
   },
   "scripts": {
+    "prebuild": "del-cli \"**/*.js\" \"**/*.d.ts\" \"!node_modules/**\"",
     "build": "tsc"
   }
 }

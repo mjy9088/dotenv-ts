@@ -1,10 +1,10 @@
 {
-    "compilerOptions": {
-        "esModuleInterop": true,
-        "downlevelIteration": true,
-        "declaration": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "declaration": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
