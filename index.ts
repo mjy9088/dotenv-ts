@@ -226,7 +226,7 @@ export function apply(
   }
 }
 
-export default function config(
+export function config(
   {
     dirname = process.cwd(),
     mode,

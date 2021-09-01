@@ -15,13 +15,13 @@ npm i -D dotenv-ts
 ## Usage
 
 ```javascript
-require('dotenv-ts').default()
+require('dotenv-ts').config()
 ```
 
 or with options
 
 ```javascript
-require('dotenv-ts').default(options)
+require('dotenv-ts').config(options)
 ```
 
 ## Options
